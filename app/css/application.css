@@ -243,11 +243,14 @@ body {
 }
 .program-timeline .timeline-head .timerange {
   font-size: 12.04px;
+  text-transform: uppercase;
   font-weight: bold;
   padding: 1px 0 0;
 }
 .program-timeline .timeline-body {
   height: 150px;
+  width: 187px;
+  margin: 0 auto;
 }
 .program-timeline .timeline-footer {
   height: 75px;
