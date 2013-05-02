@@ -1,6 +1,7 @@
-# melange timeline
+# Melange Timeline
 
-refactoring of melange timeline plugin
+Refactoring of melange timeline plugin.
+Demo [here](http://bumbu.github.io/melange-timeline/app/).
 
 ## ToDo:
   * Add pie gradient
