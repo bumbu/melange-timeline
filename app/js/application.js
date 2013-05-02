@@ -3,7 +3,7 @@ $(function() {
     , color_blue = '#3089b6'
     , color_blue_light = '#bff2ff'
     , color_gray = '#e7e7ea'
-    , slices = r.set()
+    , slice_active
     , slice_opacity = 0.6
     , timeline_title_default = timeline.title_element.innerHTML
     , timeline_timerange_default = timeline.timerange_element.innerHTML
@@ -45,33 +45,48 @@ $(function() {
   var circle_outer = r.circle(94, 78, 64).attr({stroke: color_blue, "stroke-width": 3, opacity: 0.25});
 
   for (i = 0, ii = timeline.slices.length; i < ii; i++) {
-    var slice = timeline.slices[i];
 
     (function (slice) {
-      var semiring = r.path()
+      // Create arc
+      slice._arc = r.path()
         .attr({arc: [94, 78, 64, slice.from, slice.to], "stroke-width": 3, stroke: color_blue, opacity: 0});
 
-      var piece = r
+      // Create slice
+      slice._piece = r
         .path()
         .attr({segment: [94, 78, 59, slice.from, slice.to, slice.color], "stroke-width": 0})
         .mouseover(function () {
           // change opacity
-          this.attr({opacity: 1})
+          this.attr({opacity: 1});
           // change html contents
-          timeline.title_element.innerHTML = slice.title
-          timeline.timerange_element.innerHTML = slice.timerange
-          semiring.attr({opacity: 1})
+          timeline.title_element.innerHTML = slice.title;
+          timeline.timerange_element.innerHTML = slice.timerange;
+          slice._arc.attr({opacity: 1});
+
+          if (slice != slice_active) {
+            slice_active._piece.attr({opacity: slice_opacity});
+            slice_active._arc.attr({opacity: 0});
+          }
+
         }).mouseout(function () {
           // change opacity
-          this.attr({opacity: slice_opacity})
+          this.attr({opacity: slice_opacity});
           // change html contents
-          timeline.title_element.innerHTML = timeline_title_default
-          timeline.timerange_element.innerHTML = timeline_timerange_default
-          semiring.attr({opacity: 0})
+          timeline.title_element.innerHTML = timeline_title_default;
+          timeline.timerange_element.innerHTML = timeline_timerange_default;
+          slice._arc.attr({opacity: 0});
+          
+          slice_active._piece.attr({opacity: 1});
+          slice_active._arc.attr({opacity: 1});
         });
-      
-      slices.push(piece);
-    })(slice);
+
+      if (slice.active === true) {
+        slice_active = slice;
+        slice._piece.attr({opacity: 1});
+        slice._arc.attr({opacity: 1});
+      }
+
+    })(timeline.slices[i]);
 
   }
 
