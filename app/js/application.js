@@ -7,6 +7,7 @@ $(function() {
     , slice_opacity = 0.6
     , timeline_title_default = timeline.title_element.innerHTML
     , timeline_timerange_default = timeline.timerange_element.innerHTML
+    ;
 
   r.customAttributes.segment = function (x, y, r, a1, a2, color) {
     var flag = (a2 - a1) > 180
@@ -22,6 +23,21 @@ $(function() {
     };
   };
 
+  r.customAttributes.arc = function (x, y, r, a1, a2) {
+    var flag = (a2 - a1) > 180
+      , clr = (a2 - a1) / 360;
+
+    a1 = (a1 % 360) * Math.PI / 180;
+    a2 = (a2 % 360) * Math.PI / 180;
+
+    // r.path([["M", x, y], ["l", r * Math.cos(a1), r * Math.sin(a1)]]).attr({stroke: color_blue});
+    // r.path('M0 0L187 0').attr({stroke: color_blue});
+
+    return {
+      path: [["M", x + r * Math.cos(a1), y + r * Math.sin(a1)], ["A", r, r, 0, +flag, 1, x + r * Math.cos(a2), y + r * Math.sin(a2)]]
+    };
+  };
+
   // Add top lines
   r.path('M0 0L187 0').attr({stroke: color_blue});
   r.path('M0 1L187 1').attr({stroke: color_blue_light});
@@ -32,6 +48,9 @@ $(function() {
     var slice = timeline.slices[i];
 
     (function (slice) {
+      var semiring = r.path()
+        .attr({arc: [94, 78, 64, slice.from, slice.to], "stroke-width": 3, stroke: color_blue, opacity: 0});
+
       var piece = r
         .path()
         .attr({segment: [94, 78, 59, slice.from, slice.to, slice.color], "stroke-width": 0})
@@ -41,12 +60,14 @@ $(function() {
           // change html contents
           timeline.title_element.innerHTML = slice.title
           timeline.timerange_element.innerHTML = slice.timerange
+          semiring.attr({opacity: 1})
         }).mouseout(function () {
           // change opacity
           this.attr({opacity: slice_opacity})
           // change html contents
           timeline.title_element.innerHTML = timeline_title_default
           timeline.timerange_element.innerHTML = timeline_timerange_default
+          semiring.attr({opacity: 0})
         });
       
       slices.push(piece);
