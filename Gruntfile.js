@@ -6,10 +6,6 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     watch: {
-      // coffee: {
-      //   files: ['src/scripts/*.coffee'],
-      //   tasks: ['coffee:production']
-      // },
       less: {
         files: ['src/styles/{,*/}*.less'],
         tasks: ['less:development']
@@ -95,7 +91,6 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('server', [
-    // 'coffee:development',
     'less:development',
     'watchWithLiveReload'
   ]);
@@ -104,7 +99,6 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('build', [
-    // 'coffee:production',
     'less:production',
     'clean:production'
   ]);
