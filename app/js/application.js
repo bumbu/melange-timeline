@@ -1,5 +1,5 @@
 $(function() {
-  var r = Raphael('timeline-body'),
+  var R = Raphael('timeline-body'),
     color_blue = '#3089b6',
     color_blue_light = '#bff2ff',
     color_gray = '#e7e7ea',
@@ -9,7 +9,7 @@ $(function() {
     timeline_timerange_default = timeline.timerange_element.innerHTML
     ;
 
-  r.customAttributes.segment = function (x, y, r, a1, a2, color) {
+  R.customAttributes.segment = function (x, y, r, a1, a2, color) {
     var flag = (a2 - a1) > 180,
       clr = (a2 - a1) / 360;
 
@@ -23,7 +23,7 @@ $(function() {
     };
   };
 
-  r.customAttributes.arc = function (x, y, r, a1, a2) {
+  R.customAttributes.arc = function (x, y, r, a1, a2) {
     var flag = (a2 - a1) > 180,
       clr = (a2 - a1) / 360;
 
@@ -36,18 +36,17 @@ $(function() {
   };
 
   // Add top lines
-  r.path('M0 0L187 0').attr({stroke: color_blue});
-  r.path('M0 1L187 1').attr({stroke: color_blue_light});
+  R.path('M0 0L187 0').attr({stroke: color_blue});
+  R.path('M0 1L187 1').attr({stroke: color_blue_light});
 
-  var circle_outer = r.circle(94, 78, 64).attr({stroke: color_blue, "stroke-width": 3, opacity: 0.25}),
+  var circle_outer = R.circle(94, 78, 64).attr({stroke: color_blue, "stroke-width": 3, opacity: 0.25}),
     draw_slice = function (slice) {
       // Create arc
-      slice._arc = r.path()
+      slice._arc = R.path()
         .attr({arc: [94, 78, 64, slice.from, slice.to], "stroke-width": 3, stroke: color_blue, opacity: 0});
 
       // Create slice
-      slice._piece = r
-        .path()
+      slice._piece = R.path()
         .attr({segment: [94, 78, 59, slice.from, slice.to, slice.color], "stroke-width": 0})
         .mouseover(function () {
           // change opacity
@@ -85,8 +84,8 @@ $(function() {
     draw_slice(timeline.slices[i]);
   }
 
-  var circle_inner = r.circle(94, 78, 33).attr({fill: "#ffffff", "stroke-width": 0}),
-    year = r.text(94, 78, "2013").attr({font: '700 18px "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif', fill: color_blue}),
-    inner_line = r.path('M94 91L94 111').attr({stroke: color_gray, "stroke-width": 1});
+  var circle_inner = R.circle(94, 78, 33).attr({fill: "#ffffff", "stroke-width": 0}),
+    year = R.text(94, 78, "2013").attr({font: '700 18px "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif', fill: color_blue}),
+    inner_line = R.path('M94 91L94 111').attr({stroke: color_gray, "stroke-width": 1});
 
 });
