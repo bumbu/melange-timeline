@@ -60,8 +60,13 @@
       this.R.path('M0 0.5L187 0.5').attr({stroke: options.color_blue});
       this.R.path('M0 1.5L187 1.5').attr({stroke: options.color_blue_light});
 
-      // Draw slices
       for (i in slices) {
+        // Check for colors. Set default if missing
+        if (slices[i].color === undefined) {
+          slices[i].color = options.colors_default[i % options.colors_default.length]
+        }
+
+        // Draw
         this.draw_slice(slices[i]);
       }
 
@@ -207,7 +212,8 @@
     color_gray: '#e7e7ea',
     slice_faded_opacity: 0.2,
     title_element: null,
-    timerange_element: null
+    timerange_element: null,
+    colors_default: ['#d3d2d7', '#fb1714', '#fde733', '#92f13d', '#16d53d', '#419ca6', '#03588c']
   };
 
 }(window.jQuery);
