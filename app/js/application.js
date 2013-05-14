@@ -1,37 +1,34 @@
 $(function() {
-  var r = Raphael('timeline-body')
-    , color_blue = '#3089b6'
-    , color_blue_light = '#bff2ff'
-    , color_gray = '#e7e7ea'
-    , slice_active
-    , slice_opacity = 0.6
-    , timeline_title_default = timeline.title_element.innerHTML
-    , timeline_timerange_default = timeline.timerange_element.innerHTML
+  var r = Raphael('timeline-body'),
+    color_blue = '#3089b6',
+    color_blue_light = '#bff2ff',
+    color_gray = '#e7e7ea',
+    slice_active,
+    slice_opacity = 0.6,
+    timeline_title_default = timeline.title_element.innerHTML,
+    timeline_timerange_default = timeline.timerange_element.innerHTML
     ;
 
   r.customAttributes.segment = function (x, y, r, a1, a2, color) {
-    var flag = (a2 - a1) > 180
-      , clr = (a2 - a1) / 360;
+    var flag = (a2 - a1) > 180,
+      clr = (a2 - a1) / 360;
 
     a1 = (a1 % 360) * Math.PI / 180;
     a2 = (a2 % 360) * Math.PI / 180;
 
     return {
-        path: [["M", x, y], ["l", r * Math.cos(a1), r * Math.sin(a1)], ["A", r, r, 0, +flag, 1, x + r * Math.cos(a2), y + r * Math.sin(a2)], ["z"]],
-        fill: color,
-        opacity: slice_opacity
+      path: [["M", x, y], ["l", r * Math.cos(a1), r * Math.sin(a1)], ["A", r, r, 0, +flag, 1, x + r * Math.cos(a2), y + r * Math.sin(a2)], ["z"]],
+      fill: color,
+      opacity: slice_opacity
     };
   };
 
   r.customAttributes.arc = function (x, y, r, a1, a2) {
-    var flag = (a2 - a1) > 180
-      , clr = (a2 - a1) / 360;
+    var flag = (a2 - a1) > 180,
+      clr = (a2 - a1) / 360;
 
     a1 = (a1 % 360) * Math.PI / 180;
     a2 = (a2 % 360) * Math.PI / 180;
-
-    // r.path([["M", x, y], ["l", r * Math.cos(a1), r * Math.sin(a1)]]).attr({stroke: color_blue});
-    // r.path('M0 0L187 0').attr({stroke: color_blue});
 
     return {
       path: [["M", x + r * Math.cos(a1), y + r * Math.sin(a1)], ["A", r, r, 0, +flag, 1, x + r * Math.cos(a2), y + r * Math.sin(a2)]]
@@ -75,7 +72,7 @@ $(function() {
           timeline.title_element.innerHTML = timeline_title_default;
           timeline.timerange_element.innerHTML = timeline_timerange_default;
           slice._arc.attr({opacity: 0});
-          
+
           slice_active._piece.attr({opacity: 1});
           slice_active._arc.attr({opacity: 1});
         });
@@ -90,8 +87,8 @@ $(function() {
 
   }
 
-  var circle_inner = r.circle(94, 78, 33).attr({fill: "#ffffff", "stroke-width": 0})
-    , year = r.text(94, 78, "2013").attr({font: '700 18px "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif', fill: color_blue})
-    , inner_line = r.path('M94 91L94 111').attr({stroke: color_gray, "stroke-width": 1});
+  var circle_inner = r.circle(94, 78, 33).attr({fill: "#ffffff", "stroke-width": 0}),
+    year = r.text(94, 78, "2013").attr({font: '700 18px "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif', fill: color_blue}),
+    inner_line = r.path('M94 91L94 111').attr({stroke: color_gray, "stroke-width": 1});
 
 });
