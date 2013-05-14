@@ -139,7 +139,12 @@
         .attr({opacity: 0});
       // Create arc
       slice._arc = this.R.path()
-        .attr({arc: [94, 78, 64, slice.from, slice.to], "stroke-width": 3, stroke: options.color_blue, opacity: 0});
+        .attr({
+          arc: [94, 78, 64, slice.from, slice.to],
+          "stroke-width": 3,
+          stroke: options.color_blue,
+          opacity: options.slice_faded_opacity
+        });
 
       // Create slice
       slice._piece = this.R.path()
@@ -161,7 +166,7 @@
           if (slice != that.slice_active) {
             that.slice_active._piece.attr({opacity: options.slice_faded_opacity});
             that.slice_active._wires.attr({opacity: 0});
-            that.slice_active._arc.attr({opacity: 0});
+            that.slice_active._arc.attr({opacity: options.slice_faded_opacity});
           }
         }).mouseout(function () {
           // change opacity
@@ -170,7 +175,7 @@
           options.title_element.innerHTML = options.timeline_title_default;
           options.timerange_element.innerHTML = options.timeline_timerange_default;
           slice._wires.attr({opacity: 0});
-          slice._arc.attr({opacity: 0});
+          slice._arc.attr({opacity: options.slice_faded_opacity});
 
           that.slice_active._piece.attr({opacity: 1});
           that.slice_active._wires.attr({opacity: 1});
