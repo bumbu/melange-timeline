@@ -39,11 +39,8 @@ $(function() {
   r.path('M0 0L187 0').attr({stroke: color_blue});
   r.path('M0 1L187 1').attr({stroke: color_blue_light});
 
-  var circle_outer = r.circle(94, 78, 64).attr({stroke: color_blue, "stroke-width": 3, opacity: 0.25});
-
-  for (i = 0, ii = timeline.slices.length; i < ii; i++) {
-
-    (function (slice) {
+  var circle_outer = r.circle(94, 78, 64).attr({stroke: color_blue, "stroke-width": 3, opacity: 0.25}),
+    draw_slice = function (slice) {
       // Create arc
       slice._arc = r.path()
         .attr({arc: [94, 78, 64, slice.from, slice.to], "stroke-width": 3, stroke: color_blue, opacity: 0});
@@ -82,9 +79,10 @@ $(function() {
         slice._piece.attr({opacity: 1});
         slice._arc.attr({opacity: 1});
       }
+    };
 
-    })(timeline.slices[i]);
-
+  for (i = 0, ii = timeline.slices.length; i < ii; i++) {
+    draw_slice(timeline.slices[i]);
   }
 
   var circle_inner = r.circle(94, 78, 33).attr({fill: "#ffffff", "stroke-width": 0}),
