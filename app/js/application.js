@@ -49,6 +49,9 @@
       // Default titles
       this.options.timeline_title_default = this.options.title_element !== null && this.options.title_element.innerHTML
       this.options.timeline_timerange_default = this.options.timerange_element !== null && this.options.timerange_element.innerHTML
+
+      // Draw slices
+      this.draw(this.options.slices)
     },
 
     draw: function (slices) {
@@ -218,7 +221,8 @@
     slice_faded_opacity: 0.2,
     title_element: null,
     timerange_element: null,
-    colors_default: ['#d3d2d7', '#fb1714', '#fde733', '#92f13d', '#16d53d', '#419ca6', '#03588c']
+    colors_default: ['#d3d2d7', '#fb1714', '#fde733', '#92f13d', '#16d53d', '#419ca6', '#03588c'],
+    slices: []
   };
 
 }(window.jQuery);

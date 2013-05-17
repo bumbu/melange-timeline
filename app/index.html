@@ -17,41 +17,41 @@
           $('#timeline-body')
             .timeline({
               title_element: document.getElementById('timeline-head-title'),
-              timerange_element: document.getElementById('timeline-head-timerange')
-            })
-            .timeline('draw', [
-              {
-                title: "Off season",
-                timerange: "1st October - 10th January",
-                from: 0,
-                to: 110
-              },
-              {
-                title: "Kickoff",
-                timerange: "11th February - 28th February",
-                from: 110,
-                to: 140
-              },
-              {
-                title: "Organization Application",
-                timerange: "March",
-                from: 140,
-                to: 180
-              },
-              {
-                title: "Students Applications",
-                timerange: "April - May",
-                from: 180,
-                to: 250,
-                active: true
-              },
-              {
-                title: "Student Coding!",
-                timerange: "June - September",
-                from: 250,
-                to: 0
-              }
-          ]);
+              timerange_element: document.getElementById('timeline-head-timerange'),
+              slices: [
+                {
+                  title: "Off season",
+                  timerange: "1st October - 10th January",
+                  from: 0,
+                  to: 110
+                },
+                {
+                  title: "Kickoff",
+                  timerange: "11th February - 28th February",
+                  from: 110,
+                  to: 140
+                },
+                {
+                  title: "Organization Application",
+                  timerange: "March",
+                  from: 140,
+                  to: 180
+                },
+                {
+                  title: "Students Applications",
+                  timerange: "April - May",
+                  from: 180,
+                  to: 250,
+                  active: true
+                },
+                {
+                  title: "Student Coding!",
+                  timerange: "June - September",
+                  from: 250,
+                  to: 0
+                }
+              ]
+            });
         });
       </script>
     </div>
