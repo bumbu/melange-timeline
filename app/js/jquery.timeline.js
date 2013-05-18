@@ -50,6 +50,9 @@
       this.options.timeline_title_default = this.options.title_element !== null && this.options.title_element.innerHTML
       this.options.timeline_timerange_default = this.options.timerange_element !== null && this.options.timerange_element.innerHTML
 
+      // Init slices set
+      this.slices = []
+
       // Draw slices
       this.draw(this.options.slices)
     },
@@ -70,7 +73,7 @@
         }
 
         // Draw
-        this.draw_slice(slices[i]);
+        this.slices.push(this.draw_slice(slices[i]));
       }
 
       // Draw inner circle
@@ -191,6 +194,28 @@
         slice._wires.attr({opacity: 1});
         slice._arc.attr({opacity: 1});
       }
+
+      return slice
+    },
+
+    redraw: function (slices) {
+      // Delete previously drawn objects
+      this.clean()
+
+      // Draw
+      this.draw(slices)
+    },
+
+    clean: function () {
+      $.each(this.slices, function (index, slice) {
+        // Remove each Raphael object and set
+        slice._wires.remove()
+        slice._arc.remove()
+        slice._piece.remove()
+      })
+
+      // Empty array
+      this.slices = []
     }
 
   }
