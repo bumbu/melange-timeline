@@ -66,6 +66,8 @@
 
       slices = this.addMissingSlices(slices)
 
+      slices = this.computeTimeRanges(slices)
+
       slices = this.setActiveSlice(slices)
 
       // Add top lines
@@ -281,7 +283,6 @@
         if (this.dateToUTCMiliseconds(slice_prev.to) != this.dateToUTCMiliseconds(slice_next.from)) {
           slices.push({
             title: slice_next.title + that.options.slice_title_append,
-            timerange: "",
             from: slice_prev.to,
             to: slice_next.from,
             from_grade: slice_prev.to_grade,
@@ -292,6 +293,28 @@
       }
 
       return slices;
+    },
+
+    computeTimeRanges: function (slices) {
+      var that = this,
+        date_from,
+        date_to,
+        month_names = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+
+      for (var i = slices.length - 1; i >= 0; i--) {
+        if (slices[i].timerange == undefined) {
+          date_from = new Date(this.dateToUTCMiliseconds(slices[i].from));
+          date_to = new Date(this.dateToUTCMiliseconds(slices[i].to));
+
+          if (date_from.getUTCMonth() == date_to.getUTCMonth()) {
+            slices[i].timerange = month_names[date_from.getUTCMonth()] + " " + date_from.getUTCDate() + " - " + date_to.getUTCDate();
+          } else {
+            slices[i].timerange = month_names[date_from.getUTCMonth()] + " " + date_from.getUTCDate() + " - " + month_names[date_to.getUTCMonth()] + " " + date_to.getUTCDate();
+          }
+        }
+      };
+
+      return slices
     },
 
     setActiveSlice: function (slices) {
