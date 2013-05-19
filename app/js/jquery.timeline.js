@@ -62,6 +62,12 @@
         that = this,
         i;
 
+      slices = this.datesToGrades(slices)
+
+      slices = this.addMissingSlices(slices)
+
+      slices = this.setActiveSlice(slices)
+
       // Add top lines
       this.R.path('M0 0.5L187 0.5').attr({stroke: options.color_blue});
       this.R.path('M0 1.5L187 1.5').attr({stroke: options.color_blue_light});
@@ -141,12 +147,12 @@
         that = this;
 
       // Create wires
-      slice._wires = this.draw_wires(94, 78, 67, slice.from, slice.to, options.color_blue, options.color_blue_light)
+      slice._wires = this.draw_wires(94, 78, 67, slice.from_grade, slice.to_grade, options.color_blue, options.color_blue_light)
         .attr({opacity: 0});
       // Create arc
       slice._arc = this.R.path()
         .attr({
-          arc: [94, 78, 64, slice.from, slice.to],
+          arc: [94, 78, 64, slice.from_grade, slice.to_grade],
           "stroke-width": 3,
           stroke: options.color_blue,
           opacity: options.slice_faded_opacity
@@ -155,7 +161,7 @@
       // Create slice
       slice._piece = this.R.path()
         .attr({
-          segment: [94, 78, 59, slice.from, slice.to],
+          segment: [94, 78, 59, slice.from_grade, slice.to_grade],
           "stroke-width": 0,
           fill: slice.color,
           opacity: options.slice_faded_opacity
@@ -216,6 +222,92 @@
 
       // Empty array
       this.slices = []
+    },
+
+    datesToGrades: function (slices) {
+      var that = this,
+        time_start = null,
+        time_end = null,
+        time_zero_grade,
+        milisecondsInOneGrade = 1000 * 60 * 60 * 24 * 365 / 360;
+
+      // Find minimax and maximal time intervals
+      $.each(slices, function (index, slice) {
+        if (time_start == null || time_start > that.dateToUTCMiliseconds(slice.from)) {
+          time_start = that.dateToUTCMiliseconds(slice.from);
+        }
+        if (time_end == null || time_end < that.dateToUTCMiliseconds(slice.to)) {
+          time_end = that.dateToUTCMiliseconds(slice.to);
+        }
+      })
+
+      // 90 grades is first day of last year
+      // 0 grades will be first day of last year minus 3 months
+      time_zero_grade = Date.UTC(new Date(time_end).getFullYear() - 1, 9, 1);
+
+      // Transform dates to grades
+      for (var index in slices) {
+        slices[index].from_grade = (that.dateToUTCMiliseconds(slices[index].from) - time_zero_grade)/milisecondsInOneGrade;
+        slices[index].to_grade = (that.dateToUTCMiliseconds(slices[index].to) - time_zero_grade)/milisecondsInOneGrade;
+      }
+
+      return slices
+    },
+
+    // Parse yyyy-mm-dd hh:mm:ss
+    // Parse using custom function as standart parse function is implementation dependant
+    // Returns number of miliseconds from midnight January 1 1970
+    dateToUTCMiliseconds: function (date) {
+      var parts = date.match(/(\d+)/g);
+      return Date.UTC(parts[0], parts[1]-1, parts[2], parts[3], parts[4], parts[5] || 0); // months are 0-based
+    },
+
+    addMissingSlices: function (slices) {
+      var that = this,
+        slices_count = slices.length,
+        slice_prev,
+        slice_next;
+
+      // Sort slices
+      slices.sort(function (a, b) {return that.dateToUTCMiliseconds(a.from) - that.dateToUTCMiliseconds(b.from)});
+
+      for (var index = 0; index < slices_count; index++) {
+        slice_prev = slices[index];
+        slice_next = slices[(index+1)%slices_count];
+
+        if (this.dateToUTCMiliseconds(slice_prev.to) != this.dateToUTCMiliseconds(slice_next.from)) {
+          slices.push({
+            title: slice_next.title + that.options.slice_title_append,
+            timerange: "",
+            from: slice_prev.to,
+            to: slice_next.from,
+            from_grade: slice_prev.to_grade,
+            to_grade: slice_next.from_grade,
+            color: that.options.color_gray
+          });
+        }
+      }
+
+      return slices;
+    },
+
+    setActiveSlice: function (slices) {
+      var slices_count = slices.length;
+
+      // transform date into miliseconds
+      if (isNaN(parseInt(this.options.now)) || !isFinite(this.options.now)) {
+        this.options.now = this.dateToUTCMiliseconds(this.options.now);
+      }
+
+      // Find active slice and set it as active
+      for (var index = 0; index < slices_count; index++) {
+        if (this.dateToUTCMiliseconds(slices[index].from) < this.options.now && this.dateToUTCMiliseconds(slices[index].to) > this.options.now) {
+          slices[index].active = true;
+          break;
+        }
+      }
+
+      return slices;
     }
 
   }
@@ -247,7 +339,9 @@
     title_element: null,
     timerange_element: null,
     colors_default: ['#d3d2d7', '#fb1714', '#fde733', '#92f13d', '#16d53d', '#419ca6', '#03588c'],
-    slices: []
+    slices: [],
+    slice_title_append: ' soon',
+    now: new Date().getTime()
   };
 
 }(window.jQuery);

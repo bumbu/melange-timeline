@@ -240,6 +240,7 @@ body {
   font-size: 16.939999999999998px;
   font-weight: bold;
   padding: 9px 0 0;
+  white-space: nowrap;
 }
 .program-timeline .timeline-head .timerange {
   font-size: 12.04px;
