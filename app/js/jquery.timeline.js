@@ -85,7 +85,7 @@
       // Draw inner circle
       this.inner = {
         circle: that.R.circle(94, 78, 33).attr({fill: "#ffffff", "stroke-width": 0}),
-        text: that.R.text(94, 78, "2013").attr({font: '700 18px "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif', fill: options.color_blue}),
+        text: that.R.text(94, 78, that.year).attr({font: '700 18px "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif', fill: options.color_blue}),
         line: that.R.path('M94 91L94 111').attr({stroke: options.color_gray})
       };
     },
@@ -244,6 +244,9 @@
       // 90 grades is first day of last year
       // 0 grades will be first day of last year minus 3 months
       time_zero_grade = Date.UTC(new Date(time_end).getFullYear() - 1, 9, 1);
+
+      // Store current year
+      this.year = new Date(time_end).getFullYear();
 
       // Transform dates to grades
       for (var index in slices) {
