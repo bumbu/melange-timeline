@@ -6,7 +6,8 @@ It should be used as a jQuery plugin.
 Demo [here](http://bumbu.github.io/melange-timeline/app/).
 
 ## ToDo:
-  * Add pie gradient
-  * Add option for displaing text on pie
+  * Make widget elements parametric (text's manipulation should be outside of plugin)
+  * Make widget scalable + Fix wires
+  * Update widget view in time
   * Document
   * Merge into Melange
