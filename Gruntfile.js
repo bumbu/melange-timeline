@@ -92,9 +92,6 @@ module.exports = function(grunt) {
         }
       },
       all: ['app/js/*.js']
-    },
-    clean: {
-      production: 'app/js/{,*/}*.map'
     }
   });
 
@@ -116,17 +113,12 @@ module.exports = function(grunt) {
     'watchWithLiveReload'
   ]);
 
-  grunt.registerTask('test', [
-  ]);
-
   grunt.registerTask('build', [
-    'less:production',
-    'clean:production'
+    'less:production'
   ]);
 
   grunt.registerTask('default', [
     'jshint',
-    'test',
     'build'
   ]);
 
