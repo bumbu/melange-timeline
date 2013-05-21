@@ -7,7 +7,7 @@
   * ==================== */
 
   var Timeline = function (element, options) {
-    this.init(element, options)
+    this.init(element, options);
   };
 
   Timeline.prototype = {
@@ -20,8 +20,7 @@
 
       // Definde R custom attributes
       this.R.customAttributes.segment = function (x, y, r, a1, a2) {
-        var flag = (a2 - a1) > 180,
-          clr = (a2 - a1) / 360;
+        var flag = (a2 - a1) > 180;
 
         a1 = (a1 % 360) * Math.PI / 180;
         a2 = (a2 % 360) * Math.PI / 180;
@@ -32,8 +31,7 @@
       };
 
       this.R.customAttributes.arc = function (x, y, r, a1, a2) {
-        var flag = (a2 - a1) > 180,
-          clr = (a2 - a1) / 360;
+        var flag = (a2 - a1) > 180;
 
         a1 = (a1 % 360) * Math.PI / 180;
         a2 = (a2 % 360) * Math.PI / 180;
@@ -47,14 +45,14 @@
       this.slice_active = null;
 
       // Default titles
-      this.options.timeline_title_default = this.options.title_element !== null && this.options.title_element.innerHTML
-      this.options.timeline_timerange_default = this.options.timerange_element !== null && this.options.timerange_element.innerHTML
+      this.options.timeline_title_default = this.options.title_element !== null && this.options.title_element.innerHTML;
+      this.options.timeline_timerange_default = this.options.timerange_element !== null && this.options.timerange_element.innerHTML;
 
       // Init slices set
-      this.slices = []
+      this.slices = [];
 
       // Draw slices
-      this.draw(this.options.slices)
+      this.draw(this.options.slices);
     },
 
     draw: function (slices) {
@@ -62,20 +60,20 @@
         that = this,
         i;
 
-      slices = this.datesToGrades(slices)
+      slices = this.datesToGrades(slices);
 
       for (i in slices) {
         // Check for colors. Set default if missing
         if (slices[i].color === undefined) {
-          slices[i].color = options.colors_default[i % options.colors_default.length]
+          slices[i].color = options.colors_default[i % options.colors_default.length];
         }
       }
 
-      slices = this.addMissingSlices(slices)
+      slices = this.addMissingSlices(slices);
 
-      slices = this.computeTimeRanges(slices)
+      slices = this.computeTimeRanges(slices);
 
-      slices = this.setActiveSlice(slices)
+      slices = this.setActiveSlice(slices);
 
       // Add top lines
       this.R.path('M0 0.5L187 0.5').attr({stroke: options.color_blue});
@@ -99,48 +97,49 @@
         a_middle = (((a1 + a2) / 2) + (a2 < a1 ? 180 : 0)) % 360,
         a_middle_rad = (a_middle % 360) * Math.PI / 180,
         is_bottom = a_middle <= 180,
-        is_left = a_middle > 90 && a_middle < 270,
-        color_w1 = color_w1 || this.options.color_blue
-        color_w2 = color_w2 || this.options.color_blue_light;
+        is_left = a_middle > 90 && a_middle < 270;
+
+      color_w1 = color_w1 || this.options.color_blue;
+      color_w2 = color_w2 || this.options.color_blue_light;
 
       if (is_bottom) {
         // First line
         wires.push(this.R.path().attr({
           path: [
-            ["M", ~~((is_left ? 6 : -6) + x + r * Math.cos(a_middle_rad)), ~~(y + 2 + r * Math.sin(a_middle_rad)) + 0.5]
-          , ["l", ~~(is_left ? (-r - 10 - r * Math.cos(a_middle_rad)) : (r + 10 - r * Math.cos(a_middle_rad))) + 0.5, 0]
-          , ["l", 0, -~~(y + 2 + r * Math.sin(a_middle_rad)) - 0.5]
-          ]
-        , stroke: color_w1
-        }))
+            ["M", ~~((is_left ? 6 : -6) + x + r * Math.cos(a_middle_rad)), ~~(y + 2 + r * Math.sin(a_middle_rad)) + 0.5],
+            ["l", ~~(is_left ? (-r - 10 - r * Math.cos(a_middle_rad)) : (r + 10 - r * Math.cos(a_middle_rad))) + 0.5, 0],
+            ["l", 0, -~~(y + 2 + r * Math.sin(a_middle_rad)) - 0.5]
+          ],
+          stroke: color_w1
+        }));
 
         // Second line
         wires.push(this.R.path().attr({
           path: [
-            ["M", ~~((is_left ? 6 : -6) + x + r * Math.cos(a_middle_rad)), ~~(y + 2 + r * Math.sin(a_middle_rad)) + 1.5]
-          , ["l", ~~(is_left ? (-r - 11 - r * Math.cos(a_middle_rad)) : (r + 11 - r * Math.cos(a_middle_rad))) + 0.5, 0]
-          , ["l", 0, -~~(y + 2 + r * Math.sin(a_middle_rad)) - 0.5]
-          ]
-        , stroke: color_w2
-        }))
+            ["M", ~~((is_left ? 6 : -6) + x + r * Math.cos(a_middle_rad)), ~~(y + 2 + r * Math.sin(a_middle_rad)) + 1.5],
+            ["l", ~~(is_left ? (-r - 11 - r * Math.cos(a_middle_rad)) : (r + 11 - r * Math.cos(a_middle_rad))) + 0.5, 0],
+            ["l", 0, -~~(y + 2 + r * Math.sin(a_middle_rad)) - 0.5]
+          ],
+          stroke: color_w2
+        }));
       } else {
         // First line
         wires.push(this.R.path().attr({
           path: [
-            ["M", ~~(x + r * Math.cos(a_middle_rad)) + 0.5, ~~(y + 4 + r * Math.sin(a_middle_rad))]
-          , ["L", ~~(x + r * Math.cos(a_middle_rad)) + 0.5, 0]
-          ]
-        , stroke: color_w1
-        }))
+            ["M", ~~(x + r * Math.cos(a_middle_rad)) + 0.5, ~~(y + 4 + r * Math.sin(a_middle_rad))],
+            ["L", ~~(x + r * Math.cos(a_middle_rad)) + 0.5, 0]
+          ],
+          stroke: color_w1
+        }));
 
         // Second line
         wires.push(this.R.path().attr({
           path: [
-            ["M", ~~(x + r * Math.cos(a_middle_rad)) + 0.5 - (is_left ? 1 : -1), ~~(y + 4 + r * Math.sin(a_middle_rad))]
-          , ["L", ~~(x + r * Math.cos(a_middle_rad)) + 0.5 - (is_left ? 1 : -1), 1]
-          ]
-        , stroke: color_w2
-        }))
+            ["M", ~~(x + r * Math.cos(a_middle_rad)) + 0.5 - (is_left ? 1 : -1), ~~(y + 4 + r * Math.sin(a_middle_rad))],
+            ["L", ~~(x + r * Math.cos(a_middle_rad)) + 0.5 - (is_left ? 1 : -1), 1]
+          ],
+          stroke: color_w2
+        }));
       }
 
       return wires;
@@ -205,27 +204,27 @@
         slice._arc.attr({opacity: 1});
       }
 
-      return slice
+      return slice;
     },
 
     redraw: function (slices) {
       // Delete previously drawn objects
-      this.clean()
+      this.clean();
 
       // Draw
-      this.draw(slices)
+      this.draw(slices);
     },
 
     clean: function () {
       $.each(this.slices, function (index, slice) {
         // Remove each Raphael object and set
-        slice._wires.remove()
-        slice._arc.remove()
-        slice._piece.remove()
-      })
+        slice._wires.remove();
+        slice._arc.remove();
+        slice._piece.remove();
+      });
 
       // Empty array
-      this.slices = []
+      this.slices = [];
     },
 
     datesToGrades: function (slices) {
@@ -237,13 +236,13 @@
 
       // Find minimax and maximal time intervals
       $.each(slices, function (index, slice) {
-        if (time_start == null || time_start > that.dateToUTCMiliseconds(slice.from)) {
+        if (time_start === null || time_start > that.dateToUTCMiliseconds(slice.from)) {
           time_start = that.dateToUTCMiliseconds(slice.from);
         }
-        if (time_end == null || time_end < that.dateToUTCMiliseconds(slice.to)) {
+        if (time_end === null || time_end < that.dateToUTCMiliseconds(slice.to)) {
           time_end = that.dateToUTCMiliseconds(slice.to);
         }
-      })
+      });
 
       // 90 grades is first day of last year
       // 0 grades will be first day of last year minus 3 months
@@ -254,11 +253,11 @@
 
       // Transform dates to grades
       for (var index in slices) {
-        slices[index].from_grade = (that.dateToUTCMiliseconds(slices[index].from) - time_zero_grade)/milisecondsInOneGrade;
-        slices[index].to_grade = (that.dateToUTCMiliseconds(slices[index].to) - time_zero_grade)/milisecondsInOneGrade;
+        slices[index].from_grade = (that.dateToUTCMiliseconds(slices[index].from) - time_zero_grade) / milisecondsInOneGrade;
+        slices[index].to_grade = (that.dateToUTCMiliseconds(slices[index].to) - time_zero_grade) / milisecondsInOneGrade;
       }
 
-      return slices
+      return slices;
     },
 
     // Parse yyyy-mm-dd hh:mm:ss
@@ -266,7 +265,7 @@
     // Returns number of miliseconds from midnight January 1 1970
     dateToUTCMiliseconds: function (date) {
       var parts = date.match(/(\d+)/g);
-      return Date.UTC(parts[0], parts[1]-1, parts[2], parts[3], parts[4], parts[5] || 0); // months are 0-based
+      return Date.UTC(parts[0], parts[1] - 1, parts[2], parts[3], parts[4], parts[5] || 0); // months are 0-based
     },
 
     addMissingSlices: function (slices) {
@@ -276,11 +275,11 @@
         slice_next;
 
       // Sort slices
-      slices.sort(function (a, b) {return that.dateToUTCMiliseconds(a.from) - that.dateToUTCMiliseconds(b.from)});
+      slices.sort(function (a, b) {return that.dateToUTCMiliseconds(a.from) - that.dateToUTCMiliseconds(b.from); });
 
       for (var index = 0; index < slices_count; index++) {
         slice_prev = slices[index];
-        slice_next = slices[(index+1)%slices_count];
+        slice_next = slices[(index + 1) % slices_count];
 
         if (this.dateToUTCMiliseconds(slice_prev.to) != this.dateToUTCMiliseconds(slice_next.from)) {
           slices.push({
@@ -298,13 +297,12 @@
     },
 
     computeTimeRanges: function (slices) {
-      var that = this,
-        date_from,
+      var date_from,
         date_to,
         month_names = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
 
       for (var i = slices.length - 1; i >= 0; i--) {
-        if (slices[i].timerange == undefined) {
+        if (slices[i].timerange === undefined) {
           date_from = new Date(this.dateToUTCMiliseconds(slices[i].from));
           date_to = new Date(this.dateToUTCMiliseconds(slices[i].to));
 
@@ -314,16 +312,16 @@
             slices[i].timerange = month_names[date_from.getUTCMonth()] + " " + date_from.getUTCDate() + " - " + month_names[date_to.getUTCMonth()] + " " + date_to.getUTCDate();
           }
         }
-      };
+      }
 
-      return slices
+      return slices;
     },
 
     setActiveSlice: function (slices) {
       var slices_count = slices.length;
 
       // transform date into miliseconds
-      if (isNaN(parseInt(this.options.now)) || !isFinite(this.options.now)) {
+      if (isNaN(parseInt(this.options.now, 10)) || !isFinite(this.options.now)) {
         this.options.now = this.dateToUTCMiliseconds(this.options.now);
       }
 
@@ -340,18 +338,27 @@
 
     // Source http://stackoverflow.com/a/13542669/1194327
     shadeColor: function (color, percent) {
-      var num = parseInt(color.slice(1),16), amt = Math.round(2.55 * percent), R = (num >> 16) + amt, B = (num >> 8 & 0x00FF) + amt, G = (num & 0x0000FF) + amt;
-      console.log(color, percent, "#" + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (B<255?B<1?0:B:255)*0x100 + (G<255?G<1?0:G:255)).toString(16).slice(1));
-      return "#" + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (B<255?B<1?0:B:255)*0x100 + (G<255?G<1?0:G:255)).toString(16).slice(1);
+      var num = parseInt(color.slice(1), 16),
+        amt = Math.round(2.55 * percent),
+        R = (num >> 16) + amt,
+        B = (num >> 8 & 0x00FF) + amt,
+        G = (num & 0x0000FF) + amt;
+
+      return "#" + (
+        0x1000000 +
+        (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+        (B < 255 ? B < 1 ? 0 : B : 255) * 0x100 +
+        (G < 255 ? G < 1 ? 0 : G : 255)
+      ).toString(16).slice(1);
     }
 
-  }
+  };
 
 
  /* Timeline PLUGIN DEFINITION
   * ===================== */
 
-  $.fn.timeline = function ( option ) {
+  $.fn.timeline = function (option) {
     var parent_arguments = Array.prototype.slice.call(arguments);
 
     return this.each(function () {
@@ -359,9 +366,14 @@
         data = $this.data('timeline'),
         options = typeof option == 'object' && option;
 
-      if (!data) $this.data('timeline', (data = new Timeline(this, options)));
-      if (typeof option == 'string') data[option].apply(data, parent_arguments.slice(1));
-    })
+      if (!data) {
+        $this.data('timeline', (data = new Timeline(this, options)));
+      }
+
+      if (typeof option == 'string') {
+        data[option].apply(data, parent_arguments.slice(1));
+      }
+    });
   };
 
   $.fn.timeline.Constructor = Timeline;

@@ -73,6 +73,26 @@ module.exports = function(grunt) {
         }]
       }
     },
+    jshint: {
+      // Description for options are here
+      options: {
+        "laxcomma": false,
+        "newcap": false,
+        "trailing": true,
+        "unused": true,
+        "indent": 2,
+        "curly": true,
+        "undef": true,
+        "expr": true,
+        "globals": {
+          "window": true,
+          "jQuery": true,
+          "$": true,
+          "Raphael": true
+        }
+      },
+      all: ['app/js/*.js']
+    },
     clean: {
       production: 'app/js/{,*/}*.map'
     }
@@ -83,6 +103,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
 
   // Tasks definitions
   grunt.registerTask('watchWithLiveReload', [
@@ -104,7 +125,7 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('default', [
-    // 'jshint',
+    'jshint',
     'test',
     'build'
   ]);
