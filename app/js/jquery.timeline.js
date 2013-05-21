@@ -64,6 +64,13 @@
 
       slices = this.datesToGrades(slices)
 
+      for (i in slices) {
+        // Check for colors. Set default if missing
+        if (slices[i].color === undefined) {
+          slices[i].color = options.colors_default[i % options.colors_default.length]
+        }
+      }
+
       slices = this.addMissingSlices(slices)
 
       slices = this.computeTimeRanges(slices)
@@ -75,11 +82,6 @@
       this.R.path('M0 1.5L187 1.5').attr({stroke: options.color_blue_light});
 
       for (i in slices) {
-        // Check for colors. Set default if missing
-        if (slices[i].color === undefined) {
-          slices[i].color = options.colors_default[i % options.colors_default.length]
-        }
-
         // Draw
         this.slices.push(this.draw_slice(slices[i]));
       }
@@ -287,7 +289,7 @@
             to: slice_next.from,
             from_grade: slice_prev.to_grade,
             to_grade: slice_next.from_grade,
-            color: that.options.color_gray
+            color: that.shadeColor(slice_next.color, that.options.slice_missing_shade)
           });
         }
       }
@@ -334,6 +336,13 @@
       }
 
       return slices;
+    },
+
+    // Source http://stackoverflow.com/a/13542669/1194327
+    shadeColor: function (color, percent) {
+      var num = parseInt(color.slice(1),16), amt = Math.round(2.55 * percent), R = (num >> 16) + amt, B = (num >> 8 & 0x00FF) + amt, G = (num & 0x0000FF) + amt;
+      console.log(color, percent, "#" + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (B<255?B<1?0:B:255)*0x100 + (G<255?G<1?0:G:255)).toString(16).slice(1));
+      return "#" + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (B<255?B<1?0:B:255)*0x100 + (G<255?G<1?0:G:255)).toString(16).slice(1);
     }
 
   }
@@ -367,6 +376,7 @@
     colors_default: ['#d3d2d7', '#fb1714', '#fde733', '#92f13d', '#16d53d', '#419ca6', '#03588c'],
     slices: [],
     slice_title_append: ' soon',
+    slice_missing_shade: 30,
     now: new Date().getTime()
   };
 
