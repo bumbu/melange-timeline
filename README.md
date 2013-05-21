@@ -10,4 +10,6 @@ Demo [here](http://bumbu.github.io/melange-timeline/app/).
   * Make widget scalable + Fix wires
   * Update widget view in time
   * Document
-  * Merge into Melange
+
+## Known bugs:
+  * Some titles can be too wide and don't fit in widget
