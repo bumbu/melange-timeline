@@ -44,10 +44,6 @@
       // Default active slice
       this.slice_active = null;
 
-      // Default titles
-      this.options.timeline_title_default = this.options.title_element !== null && this.options.title_element.innerHTML;
-      this.options.timeline_timerange_default = this.options.timerange_element !== null && this.options.timerange_element.innerHTML;
-
       // Init slices set
       this.slices = [];
 
@@ -202,6 +198,14 @@
         slice._piece.attr({opacity: 1});
         slice._wires.attr({opacity: 1});
         slice._arc.attr({opacity: 1});
+
+        // Store default title and timeline
+        options.timeline_title_default = slice.title;
+        options.timeline_timerange_default = slice.timerange;
+
+        // Set default title and timeline
+        options.title_element.innerHTML = slice.title;
+        options.timerange_element.innerHTML = slice.timerange;
       }
 
       return slice;
@@ -383,8 +387,8 @@
     color_blue_light: '#bff2ff',
     color_gray: '#e7e7ea',
     slice_faded_opacity: 0.2,
-    title_element: null,
-    timerange_element: null,
+    title_element: '',
+    timerange_element: '',
     colors_default: ['#d3d2d7', '#fb1714', '#fde733', '#92f13d', '#16d53d', '#419ca6', '#03588c'],
     slices: [],
     slice_title_append: ' soon',
